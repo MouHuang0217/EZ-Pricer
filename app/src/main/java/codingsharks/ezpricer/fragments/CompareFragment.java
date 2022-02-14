@@ -165,7 +165,7 @@ public class CompareFragment extends Fragment{
                 Request request = new Request.Builder()
                         .url(url)
                         .get()
-                        .addHeader("x-rapidapi-key", "11b6ebdc42msh09ac88d621f6ab5p177cdfjsn50498d090800")
+                        .addHeader("x-rapidapi-key", "ff3e80b51bmsh29dc9dae792a5dfp184ea2jsnd5bb6a8effd9")
                         .addHeader("x-rapidapi-host", "walmart2.p.rapidapi.com")
                         .build();
                 Response response = client.newCall(request).execute();
@@ -221,7 +221,7 @@ public class CompareFragment extends Fragment{
                 Request request = new Request.Builder()
                         .url(url)
                         .get()
-                        .addHeader("x-rapidapi-key", "11b6ebdc42msh09ac88d621f6ab5p177cdfjsn50498d090800")
+                        .addHeader("x-rapidapi-key", "ff3e80b51bmsh29dc9dae792a5dfp184ea2jsnd5bb6a8effd9")
                         .addHeader("x-rapidapi-host", "amazon-price1.p.rapidapi.com")
                         .build();
                 Response response = client.newCall(request).execute();
@@ -251,14 +251,13 @@ public class CompareFragment extends Fragment{
 
         @Override
         protected void onPostExecute(Item result){
-            if(pImage.getDrawable() == null){
-                LoadImageFromWeb(result.getImageUrl());
+            if (result != null) {
+                Log.i("AMAZON", result.toString());
+                Vendor amazonVendorTest = new Vendor("Amazon", result);
+                vendorsList.add(amazonVendorTest);
+                adapter.notifyDataSetChanged();
+                Log.i("DONE", "done");
             }
-            Log.i("AMAZON", result.toString());
-            Vendor amazonVendorTest = new Vendor("Amazon",result);
-            vendorsList.add(amazonVendorTest);
-            adapter.notifyDataSetChanged();
-            Log.i("DONE", "done");
             if(dialog.isShowing()){
                 dialog.dismiss();
             }
@@ -284,7 +283,7 @@ public class CompareFragment extends Fragment{
                     Request request = new Request.Builder()
                             .url(url)
                             .get()
-                            .addHeader("x-rapidapi-key", "11b6ebdc42msh09ac88d621f6ab5p177cdfjsn50498d090800")
+                            .addHeader("x-rapidapi-key", "ff3e80b51bmsh29dc9dae792a5dfp184ea2jsnd5bb6a8effd9")
                             .addHeader("x-rapidapi-host", "amazon-price1.p.rapidapi.com")
                             .build();
                     Response response = client.newCall(request).execute();
@@ -313,13 +312,14 @@ public class CompareFragment extends Fragment{
         protected Item doInBackground(String... strings) {
             Log.i("In Barcode Walmart", strings[0]);
             OkHttpClient client = new OkHttpClient();
+            Log.i("UPC", strings[0]);
             String url = "https://walmart2.p.rapidapi.com/searchByUPC?upc=00" + strings[0];
 
             try {
                 Request request = new Request.Builder()
                         .url(url)
                         .get()
-                        .addHeader("x-rapidapi-key", "11b6ebdc42msh09ac88d621f6ab5p177cdfjsn50498d090800")
+                        .addHeader("x-rapidapi-key", "ff3e80b51bmsh29dc9dae792a5dfp184ea2jsnd5bb6a8effd9")
                         .addHeader("x-rapidapi-host", "walmart2.p.rapidapi.com")
                         .build();
                 Response response = client.newCall(request).execute();
@@ -351,8 +351,6 @@ public class CompareFragment extends Fragment{
                     Log.i("KEYS",key);
                 }
                 return new Item(name, price, mAuth.getCurrentUser().getUid(),image_url,product_url ,desc);
-
-
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
@@ -387,7 +385,8 @@ public class CompareFragment extends Fragment{
                 Request request = new Request.Builder()
                         .url(url2)
                         .get()
-                        .addHeader("x-rapidapi-key", "11b6ebdc42msh09ac88d621f6ab5p177cdfjsn50498d090800")
+                        .addHeader("x-rapidapi-key", "ff3e80b51bmsh29dc9dae792a5dfp184ea2jsnd5bb6a8effd9" +
+                                "")
                         .addHeader("x-rapidapi-host", "amazon-price1.p.rapidapi.com")
                         .build();
                 Response response = client.newCall(request).execute();
@@ -469,12 +468,14 @@ public class CompareFragment extends Fragment{
 
         @Override
         protected void onPostExecute(Item item) {
-            Vendor TargetVendorTest = new Vendor("Target",item);
-            vendorsList.add(TargetVendorTest);
-            adapter.notifyDataSetChanged();
-            Log.i("DONE","done");
-            if(dialog.isShowing()){
-                dialog.dismiss();
+            if (item != null) {
+                Vendor TargetVendorTest = new Vendor("Target", item);
+                vendorsList.add(TargetVendorTest);
+                adapter.notifyDataSetChanged();
+                Log.i("DONE", "done");
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                }
             }
         }
     }
